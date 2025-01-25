@@ -1,0 +1,916 @@
+Backend Overview for Front Desk System
+Base URL:
+All the API endpoints will be based on the following base URL:
+http://localhost:3000/api (or replace localhost:3000 with your deployed server URL).
+1. Queue Management
+Add a Walk-In Patient to the Queue
+Method: POST
+Endpoint: /queue/add
+Description: Adds a walk-in patient to the queue with a status of "waiting".
+Request Body (JSON):
+json
+Copy
+Edit
+{
+  "patientId": 1
+}
+patientId: ID of the patient being added to the queue.
+Response (Success):
+json
+Copy
+Edit
+{
+  "message": "Patient added to queue",
+  "queue": {
+    "id": 1,
+    "patient": {
+      "id": 1,
+      "name": "John Doe",
+      "gender": "Male",
+      "contactNumber": "1234567890",
+      "email": "johndoe@example.com"
+    },
+    "queueNumber": 1,
+    "status": "waiting"
+  }
+}
+Response (Error):
+json
+Copy
+Edit
+{
+  "message": "Patient not found"
+}
+Get All Queue Entries
+Method: GET
+Endpoint: /queue
+Description: Fetches all queue entries, including patient details and current statuses.
+Response (Success):
+json
+Copy
+Edit
+[
+  {
+    "id": 1,
+    "patient": {
+      "id": 1,
+      "name": "John Doe",
+      "gender": "Male",
+      "contactNumber": "1234567890",
+      "email": "johndoe@example.com"
+    },
+    "queueNumber": 1,
+    "status": "waiting"
+  },
+  {
+    "id": 2,
+    "patient": {
+      "id": 2,
+      "name": "Jane Smith",
+      "gender": "Female",
+      "contactNumber": "0987654321",
+      "email": "janesmith@example.com"
+    },
+    "queueNumber": 2,
+    "status": "with-doctor"
+  }
+]
+Response (Error):
+json
+Copy
+Edit
+{
+  "message": "An error occurred while fetching the queue."
+}
+Update the Status of a Patient in the Queue
+Method: PUT
+Endpoint: /queue/update/:id
+Description: Updates the status of a patient in the queue (e.g., from "waiting" to "with-doctor" or "completed").
+Request Parameters:
+id: ID of the queue entry to be updated.
+Request Body (JSON):
+json
+Copy
+Edit
+{
+  "status": "with-doctor"
+}
+status: New status of the patient (valid values: "waiting", "with-doctor", "completed").
+Response (Success):
+json
+Copy
+Edit
+{
+  "message": "Queue status updated",
+  "queue": {
+    "id": 1,
+    "patient": {
+      "id": 1,
+      "name": "John Doe",
+      "gender": "Male",
+      "contactNumber": "1234567890",
+      "email": "johndoe@example.com"
+    },
+    "queueNumber": 1,
+    "status": "with-doctor"
+  }
+}
+Response (Error):
+json
+Copy
+Edit
+{
+  "message": "Invalid status"
+}
+
+http://localhost:3000/api/appointments (or replace localhost:3000 with your deployed server URL).
+1. Book an Appointment
+Method: POST
+
+Endpoint: /
+
+Description: Books an appointment for a patient with a selected doctor, validating the input data before proceeding.
+
+Request Body (JSON):
+
+json
+Copy
+Edit
+{
+  "patientId": 1,
+  "doctorId": 2,
+  "appointmentDate": "2025-01-25",
+  "appointmentTime": "10:30 AM"
+}
+patientId: The ID of the patient.
+doctorId: The ID of the doctor for the appointment.
+appointmentDate: The date for the appointment.
+appointmentTime: The time for the appointment.
+Response (Success):
+
+json
+Copy
+Edit
+{
+  "message": "Appointment booked successfully",
+  "appointment": {
+    "id": 1,
+    "patientId": 1,
+    "doctorId": 2,
+    "appointmentDate": "2025-01-25",
+    "appointmentTime": "10:30 AM",
+    "status": "booked"
+  }
+}
+Response (Error - Validation):
+
+json
+Copy
+Edit
+{
+  "message": "Validation error",
+  "errors": [
+    {
+      "msg": "Invalid doctorId",
+      "param": "doctorId",
+      "location": "body"
+    }
+  ]
+}
+Response (Error - Server):
+
+json
+Copy
+Edit
+{
+  "message": "An error occurred while booking the appointment.",
+  "error": "Error stack trace"
+}
+
+2. Get All Appointments
+Method: GET
+
+Endpoint: /
+
+Description: Retrieves a list of all appointments. Optionally, query parameters can be used to filter the appointments (e.g., by patient, doctor, date).
+
+Query Parameters:
+
+patientId: The ID of the patient (optional).
+doctorId: The ID of the doctor (optional).
+appointmentDate: The date of the appointment (optional).
+Response (Success):
+
+json
+Copy
+Edit
+[
+  {
+    "id": 1,
+    "patientId": 1,
+    "doctorId": 2,
+    "appointmentDate": "2025-01-25",
+    "appointmentTime": "10:30 AM",
+    "status": "booked"
+  }
+]
+Response (Error - Server):
+
+json
+Copy
+Edit
+{
+  "message": "An error occurred while fetching appointments.",
+  "error": "Error stack trace"
+}
+3. Update an Appointment
+Method: PUT
+
+Endpoint: /:id
+
+Description: Updates the details of an existing appointment (e.g., time, date, doctor).
+
+Request Parameters:
+
+id: The ID of the appointment to be updated.
+Request Body (JSON):
+
+json
+Copy
+Edit
+{
+  "appointmentDate": "2025-01-26",
+  "appointmentTime": "11:00 AM"
+}
+appointmentDate: New date for the appointment.
+appointmentTime: New time for the appointment.
+Response (Success):
+
+json
+Copy
+Edit
+{
+  "message": "Appointment updated successfully",
+  "updatedAppointment": {
+    "id": 1,
+    "patientId": 1,
+    "doctorId": 2,
+    "appointmentDate": "2025-01-26",
+    "appointmentTime": "11:00 AM",
+    "status": "booked"
+  }
+}
+Response (Error - Validation):
+
+json
+Copy
+Edit
+{
+  "message": "Validation error",
+  "errors": [
+    {
+      "msg": "Invalid appointment date",
+      "param": "appointmentDate",
+      "location": "body"
+    }
+  ]
+}
+Response (Error - Server):
+
+json
+Copy
+Edit
+{
+  "message": "An error occurred while updating the appointment.",
+  "error": "Error stack trace"
+}
+4. Cancel an Appointment
+Method: PUT
+
+Endpoint: /:id/cancel
+
+Description: Cancels an existing appointment by updating its status and optionally providing a reason for cancellation.
+
+Request Parameters:
+
+id: The ID of the appointment to be canceled.
+Request Body (JSON):
+
+json
+Copy
+Edit
+{
+  "reason": "Patient no-show"
+}
+reason: Reason for canceling the appointment.
+Response (Success):
+
+json
+Copy
+Edit
+{
+  "message": "Appointment canceled successfully",
+  "canceledAppointment": {
+    "id": 1,
+    "patientId": 1,
+    "doctorId": 2,
+    "appointmentDate": "2025-01-25",
+    "appointmentTime": "10:30 AM",
+    "status": "canceled",
+    "cancellationReason": "Patient no-show"
+  }
+}
+Response (Error - Validation):
+
+json
+Copy
+Edit
+{
+  "message": "Validation error",
+  "errors": [
+    {
+      "msg": "Invalid reason",
+      "param": "reason",
+      "location": "body"
+    }
+  ]
+}
+Response (Error - Server):
+
+json
+Copy
+Edit
+{
+  "message": "An error occurred while canceling the appointment.",
+  "error": "Error stack trace"
+}
+5. Check Doctor Availability
+Method: GET
+
+Endpoint: /availability
+
+Description: Checks the availability of a specific doctor on a particular date and time.
+
+Query Parameters:
+
+doctorId: The ID of the doctor.
+date: The date for which the availability is being checked (in YYYY-MM-DD format).
+time: The time for which the availability is being checked (in HH:MM AM/PM format).
+Response (Success):
+
+json
+Copy
+Edit
+{
+  "doctorId": 2,
+  "available": true,
+  "message": "Doctor is available at the specified time."
+}
+Response (Error - Server):
+
+json
+Copy
+Edit
+{
+  "message": "An error occurred while checking doctor availability.",
+  "error": "Error stack trace"
+}
+Common Error Responses:
+Validation Errors:
+
+These errors occur when the input data does not meet the required format or constraints.
+Example:
+json
+Copy
+Edit
+{
+  "message": "Validation error",
+  "errors": [
+    {
+      "msg": "Invalid date format",
+      "param": "appointmentDate",
+      "location": "body"
+    }
+  ]
+}
+Server Errors:
+
+These errors occur when an internal issue happens on the server-side.
+Example:
+json
+Copy
+Edit
+{
+  "message": "An error occurred while processing your request.",
+  "error": "Error stack trace"
+}
+
+Conclusion
+This documentation outlines the API endpoints related to appointments, including how to book, update, cancel, and retrieve appointment details. Each endpoint ensures input validation and provides detailed error handling to facilitate smooth integration with the frontend.
+
+Let me know if you need any adjustments or if you'd like me to document the other sections.
+
+Doctor Management API Documentation
+Base URL:
+All the API endpoints will be based on the following base URL:
+http://localhost:3000/api/doctors (or replace localhost:3000 with your deployed server URL).
+1. Get All Doctors
+Method: GET
+
+Endpoint: /
+
+Description: Retrieves a list of all doctors in the system.
+
+Query Parameters: (optional)
+
+specialization: Filter doctors by specialization (optional).
+availability: Filter doctors based on availability (optional).
+Response (Success):
+
+json
+Copy
+Edit
+[
+  {
+    "id": 1,
+    "firstName": "John",
+    "lastName": "Doe",
+    "specialization": "Cardiology",
+    "availability": ["Monday", "Wednesday", "Friday"],
+    "contact": {
+      "email": "john.doe@example.com",
+      "phone": "+1234567890"
+    }
+  }
+]
+Response (Error - Server):
+
+json
+Copy
+Edit
+{
+  "message": "Failed to fetch doctors",
+  "error": "Error stack trace"
+}
+2. Create a New Doctor
+Method: POST
+
+Endpoint: /
+
+Description: Creates a new doctor in the system with provided details.
+
+Request Body (JSON):
+
+json
+Copy
+Edit
+{
+  "firstName": "Jane",
+  "lastName": "Smith",
+  "specialization": "Pediatrics",
+  "availability": ["Monday", "Tuesday", "Thursday"],
+  "contact": {
+    "email": "jane.smith@example.com",
+    "phone": "+9876543210"
+  }
+}
+firstName: Doctor's first name.
+lastName: Doctor's last name.
+specialization: Doctor's area of expertise.
+availability: List of days the doctor is available.
+contact: Contact details including email and phone.
+Response (Success):
+
+json
+Copy
+Edit
+{
+  "id": 2,
+  "firstName": "Jane",
+  "lastName": "Smith",
+  "specialization": "Pediatrics",
+  "availability": ["Monday", "Tuesday", "Thursday"],
+  "contact": {
+    "email": "jane.smith@example.com",
+    "phone": "+9876543210"
+  }
+}
+Response (Error - Validation):
+
+json
+Copy
+Edit
+{
+  "message": "Validation error",
+  "error": "Error message about validation failure"
+}
+Response (Error - Server):
+
+json
+Copy
+Edit
+{
+  "message": "Failed to create doctor",
+  "error": "Error stack trace"
+}
+3. Update an Existing Doctor
+Method: PUT
+
+Endpoint: /:id
+
+Description: Updates the details of an existing doctor in the system.
+
+Request Parameters:
+
+id: The ID of the doctor to be updated.
+Request Body (JSON):
+
+json
+Copy
+Edit
+{
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "specialization": "Neurology",
+  "availability": ["Monday", "Thursday", "Saturday"],
+  "contact": {
+    "email": "jane.doe@example.com",
+    "phone": "+9876543210"
+  }
+}
+firstName: Doctor's first name.
+lastName: Doctor's last name.
+specialization: Doctor's area of expertise.
+availability: List of days the doctor is available.
+contact: Contact details including email and phone.
+Response (Success):
+
+json
+Copy
+Edit
+{
+  "id": 2,
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "specialization": "Neurology",
+  "availability": ["Monday", "Thursday", "Saturday"],
+  "contact": {
+    "email": "jane.doe@example.com",
+    "phone": "+9876543210"
+  }
+}
+Response (Error - Doctor Not Found):
+
+json
+Copy
+Edit
+{
+  "message": "Failed to update doctor",
+  "error": "Doctor not found"
+}
+Response (Error - Server):
+
+json
+Copy
+Edit
+{
+  "message": "Failed to update doctor",
+  "error": "Error stack trace"
+}
+4. Delete a Doctor
+Method: DELETE
+
+Endpoint: /:id
+
+Description: Deletes a doctor from the system.
+
+Request Parameters:
+
+id: The ID of the doctor to be deleted.
+Response (Success):
+
+json
+Copy
+Edit
+{
+  "message": "Doctor deleted successfully"
+}
+Response (Error - Doctor Not Found):
+
+json
+Copy
+Edit
+{
+  "message": "Failed to delete doctor",
+  "error": "Doctor not found"
+}
+Response (Error - Server):
+
+json
+Copy
+Edit
+{
+  "message": "Failed to delete doctor",
+  "error": "Error stack trace"
+}
+Common Error Responses:
+Validation Errors:
+
+These errors occur when the input data does not meet the required format or constraints.
+Example:
+json
+Copy
+Edit
+{
+  "message": "Validation error",
+  "errors": [
+    {
+      "msg": "Email is required",
+      "param": "email",
+      "location": "body"
+    }
+  ]
+}
+Server Errors:
+
+These errors occur when an internal issue happens on the server-side.
+Example:
+json
+Copy
+Edit
+{
+  "message": "An error occurred while processing your request.",
+  "error": "Error stack trace"
+}
+Conclusion
+This documentation outlines the API endpoints related to doctors, including how to create, retrieve, update, and delete doctor details. Each endpoint provides input validation and error handling, ensuring smooth integration with the frontend.
+
+Let me know if you need further adjustments or if you'd like me to continue with other sections!
+
+Patient Management API Documentation
+Base URL:
+All the API endpoints will be based on the following base URL:
+http://localhost:3000/api/patients (or replace localhost:3000 with your deployed server URL).
+1. Get All Patients
+Method: GET
+
+Endpoint: /
+
+Description: Retrieves a list of all patients in the system.
+
+Response (Success):
+
+json
+Copy
+Edit
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "gender": "Male",
+    "contactNumber": "+1234567890",
+    "email": "john.doe@example.com",
+    "dob": "1990-01-01",
+    "patientType": "Outpatient"
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "gender": "Female",
+    "contactNumber": "+0987654321",
+    "email": "jane.smith@example.com",
+    "dob": "1985-06-15",
+    "patientType": "Inpatient"
+  }
+]
+Response (Error - Server):
+
+json
+Copy
+Edit
+{
+  "message": "Failed to fetch patients",
+  "error": "Error stack trace"
+}
+2. Get a Patient by ID
+Method: GET
+
+Endpoint: /:id
+
+Description: Retrieves a specific patient by ID.
+
+Request Parameters:
+
+id: The unique identifier of the patient.
+Response (Success):
+
+json
+Copy
+Edit
+{
+  "id": 1,
+  "name": "John Doe",
+  "gender": "Male",
+  "contactNumber": "+1234567890",
+  "email": "john.doe@example.com",
+  "dob": "1990-01-01",
+  "patientType": "Outpatient"
+}
+Response (Error - Patient Not Found):
+
+json
+Copy
+Edit
+{
+  "message": "Patient not found"
+}
+Response (Error - Server):
+
+json
+Copy
+Edit
+{
+  "message": "Failed to fetch patient",
+  "error": "Error stack trace"
+}
+3. Create a New Patient
+Method: POST
+
+Endpoint: /
+
+Description: Creates a new patient in the system.
+
+Request Body (JSON):
+
+json
+Copy
+Edit
+{
+  "name": "Mary Johnson",
+  "gender": "Female",
+  "contactNumber": "+1122334455",
+  "email": "mary.johnson@example.com",
+  "dob": "1992-11-30",
+  "patientType": "Outpatient"
+}
+name: Full name of the patient.
+gender: Gender of the patient (e.g., "Male", "Female").
+contactNumber: Contact phone number of the patient.
+email: Email address of the patient.
+dob: Date of birth of the patient (in YYYY-MM-DD format).
+patientType: Type of the patient (e.g., "Inpatient", "Outpatient").
+Response (Success):
+
+json
+Copy
+Edit
+{
+  "id": 3,
+  "name": "Mary Johnson",
+  "gender": "Female",
+  "contactNumber": "+1122334455",
+  "email": "mary.johnson@example.com",
+  "dob": "1992-11-30",
+  "patientType": "Outpatient"
+}
+Response (Error - Validation):
+
+json
+Copy
+Edit
+{
+  "message": "Validation error",
+  "error": "Error message about validation failure"
+}
+Response (Error - Server):
+
+json
+Copy
+Edit
+{
+  "message": "Failed to create patient",
+  "error": "Error stack trace"
+}
+4. Update an Existing Patient
+Method: PUT
+
+Endpoint: /:id
+
+Description: Updates the details of an existing patient in the system.
+
+Request Parameters:
+
+id: The ID of the patient to be updated.
+Request Body (JSON):
+
+json
+Copy
+Edit
+{
+  "name": "Mary Johnson",
+  "gender": "Female",
+  "contactNumber": "+1122334455",
+  "email": "mary.johnson@example.com",
+  "dob": "1992-11-30",
+  "patientType": "Inpatient"
+}
+Response (Success):
+
+json
+Copy
+Edit
+{
+  "id": 3,
+  "name": "Mary Johnson",
+  "gender": "Female",
+  "contactNumber": "+1122334455",
+  "email": "mary.johnson@example.com",
+  "dob": "1992-11-30",
+  "patientType": "Inpatient"
+}
+Response (Error - Patient Not Found):
+
+json
+Copy
+Edit
+{
+  "message": "Patient not found"
+}
+Response (Error - Server):
+
+json
+Copy
+Edit
+{
+  "message": "Failed to update patient",
+  "error": "Error stack trace"
+}
+5. Delete a Patient
+Method: DELETE
+
+Endpoint: /:id
+
+Description: Deletes a patient from the system.
+
+Request Parameters:
+
+id: The ID of the patient to be deleted.
+Response (Success):
+
+json
+Copy
+Edit
+{
+  "message": "Patient deleted"
+}
+Response (Error - Patient Not Found):
+
+json
+Copy
+Edit
+{
+  "message": "Patient not found"
+}
+Response (Error - Server):
+
+json
+Copy
+Edit
+{
+  "message": "Failed to delete patient",
+  "error": "Error stack trace"
+}
+Common Error Responses:
+Validation Errors:
+
+These errors occur when the input data does not meet the required format or constraints.
+Example:
+json
+Copy
+Edit
+{
+  "message": "Validation error",
+  "errors": [
+    {
+      "msg": "Email is required",
+      "param": "email",
+      "location": "body"
+    }
+  ]
+}
+Server Errors:
+
+These errors occur when an internal issue happens on the server-side.
+Example:
+json
+Copy
+Edit
+{
+  "message": "An error occurred while processing your request.",
+  "error": "Error stack trace"
+}
+Conclusion
+This documentation outlines the API endpoints related to patients, including how to create, retrieve, update, and delete patient details. Each endpoint provides input validation and error handling to ensure a smooth integration with the frontend.
+
+Let me know if you need any further adjustments or additional details!
+

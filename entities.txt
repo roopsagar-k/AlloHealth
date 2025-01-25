@@ -1,0 +1,154 @@
+//Appointment.ts
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    ManyToOne,
+    CreateDateColumn,
+    UpdateDateColumn,
+    BaseEntity,
+} from "typeorm";
+import { Doctor } from "./Doctor";
+import { Patient } from "./Patient";
+
+@Entity()
+export class Appointment extends BaseEntity {
+    @PrimaryGeneratedColumn()
+    id!: number;
+
+    @ManyToOne(() => Doctor, (doctor) => doctor.id)
+    doctor!: Doctor;
+
+    @ManyToOne(() => Patient, (patient) => patient.id)
+    patient!: Patient;
+
+    @Column()
+    appointmentDate!: Date;
+
+    @Column()
+    appointmentTime!: string; // e.g., "10:30 AM"
+
+    @Column({ default: "booked" }) // "booked", "completed", or "canceled"
+    status!: string;
+
+    @Column({ nullable: true })
+    reason!: string; // Reason for cancellation or rescheduling, if applicable
+
+    @CreateDateColumn()
+    createdAt!: Date;
+
+    @UpdateDateColumn()
+    updatedAt!: Date;
+}
+
+
+
+
+//Doctor.ts
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+
+@Entity()
+export class Doctor extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id!: number;
+
+  @Column()
+  name!: string;
+
+  @Column()
+  specialization!: string;
+
+  @Column()
+  location!: string;
+
+  @Column()
+  availability!: string;
+}
+
+
+// Patient.ts
+
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+
+@Entity()
+export class Patient extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id!: number;
+
+  @Column()
+  name!: string;
+
+  @Column()
+  gender!: string;
+
+  @Column()
+  contactNumber!: string;
+
+  @Column({ nullable: true })
+  email!: string;
+
+  @Column({ nullable: true })
+  dob!: Date; // Date of Birth
+
+  @Column({ default: "walk-in" }) // "walk-in" or "appointment"
+  patientType!: string;
+}
+
+//Queue.ts
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+  BaseEntity,
+} from "typeorm";
+import { Patient } from "./Patient";
+
+@Entity()
+export class Queue extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id!: number;
+
+  @ManyToOne(() => Patient, (patient) => patient.id)
+  patient!: Patient;
+
+  @Column()
+  queueNumber!: number;
+
+  @Column({ default: "waiting" }) // "waiting", "with-doctor", "completed"
+  status!: string;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
+}
+
+
+//user.ts
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+
+@Entity()
+export class User extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id!: number;
+
+  @Column({ unique: true })
+  email!: string;
+
+  @Column()
+  password!: string;
+
+  @Column({ default: "front-desk" }) // Default role is front-desk
+  role!: string;
+
+  @Column({ default: true })
+  isActive!: boolean;
+
+  @Column()
+  username!: string; 
+}
+
