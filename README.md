@@ -14,8 +14,8 @@ This project consists of a full-stack application with the frontend built using 
 
 The frontend is developed using **Next.js** and styled with **Shadcn**. It is a modern, responsive web app that interacts with the backend API.
 
-You can access the deployed frontend here:  
-**[Deployed Frontend](https://allo-health-client.vercel.app/login)**
+You can access the deployed Link here:  
+**[Deployed Link](https://allo-health-client.vercel.app/login)**
 
 ### Features:
 - **Responsive Design**: Built for desktop and mobile devices.
