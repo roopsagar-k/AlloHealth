@@ -30,3 +30,12 @@ npm install
 # Run the development server
 npm run dev
 ```
+To run the Backend locally:
+
+```bash
+# Install dependencies
+npm install
+
+# Run the development server
+npm run dev
+```
