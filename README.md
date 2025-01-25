@@ -43,9 +43,9 @@ npm run dev
 
 Here are some screenshots of the project:
 
-![Appointment Screenshot](assets/images/appointment.png)
-![Booking Screenshot](assets/images/booking.png)
-![Doctors Screenshot](assets/images/doctors.png)
-![Patients Screenshot](assets/images/patients.png)
-![Queue Screenshot](assets/images/queue.png)
+![Appointment Screenshot](https://github.com/roopsagar-k/AlloHealth/blob/main/assets/appointment.png)
+![Booking Screenshot](https://github.com/roopsagar-k/AlloHealth/blob/main/assets/booking.png)
+![Doctors Screenshot](https://github.com/roopsagar-k/AlloHealth/blob/main/assets/doctors.png)
+![Patients Screenshot](https://github.com/roopsagar-k/AlloHealth/blob/main/assets/patients.png)
+![Queue Screenshot](https://github.com/roopsagar-k/AlloHealth/blob/main/assets/queue.png)
 
