@@ -25,5 +25,3 @@ clinic-frontend/node_modules
 clinic-backend/.env
 clinic-backend/.env.local
 clinic-backend/node_modules
-clinic-backend/dist
-
