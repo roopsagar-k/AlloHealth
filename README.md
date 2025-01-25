@@ -39,3 +39,13 @@ npm install
 # Run the development server
 npm run dev
 ```
+## Images
+
+Here are some screenshots of the project:
+
+![Appointment Screenshot](assets/images/appointment.png)
+![Booking Screenshot](assets/images/booking.png)
+![Doctors Screenshot](assets/images/doctors.png)
+![Patients Screenshot](assets/images/patients.png)
+![Queue Screenshot](assets/images/queue.png)
+
