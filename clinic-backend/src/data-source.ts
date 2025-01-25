@@ -3,15 +3,6 @@ import { DataSource } from "typeorm";
 import { config } from "dotenv";
 config();
 
-if (
-  process.env.DB_HOST ||
-  process.env.DB_PORT ||
-  process.env.DB_USER ||
-  process.env.DB_PASSWORD ||
-  process.env.DB_NAME
-)
-  throw new Error("Environment variable not found!");
-
 export const AppDataSource = new DataSource({
   type: "mysql",
   host: process.env.DB_HOST,
