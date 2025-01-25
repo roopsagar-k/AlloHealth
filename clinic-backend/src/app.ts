@@ -11,7 +11,7 @@ import statsRouter from "./routes/statsRoutes";
 
 const app = express();
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: "https://allo-health-client.vercel.app",
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
